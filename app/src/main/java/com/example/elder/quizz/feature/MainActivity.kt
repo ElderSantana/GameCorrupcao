@@ -19,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     val alternativas = HashMap<Int, List<String>>()
     val respostas = arrayOf(1,2,2)
     var numeroPergunta : Int = 0
+    var numeroalternativa: Int = 0
+    var numeroPontos : Int = 0
 
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -28,6 +30,9 @@ class MainActivity : AppCompatActivity() {
 
         prepararLista()
         atualizaPerguntas()
+
+
+
 
     }
 
@@ -100,9 +105,33 @@ class MainActivity : AppCompatActivity() {
         alertDialog.setMessage("Voce acertou mizerave")
         alertDialog.show()
     }
-    fun checaResposta(view : View){
+    // to check if the awnser is correct
+    fun onClick(v: View) {
 
-//        var btn Button = this.getText()
+        when (v.id) {
+            R.id.alternativa1 -> numeroalternativa = 1
+            R.id.alternativa2 -> numeroalternativa = 2
+            R.id.alternativa3 -> numeroalternativa = 3
+            R.id.alternativa4 -> numeroalternativa = 4
+
+        }
+        if(numeroalternativa == respostas[numeroPergunta] ){
+
+            val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
+            alertDialog.setTitle("Resultado!")
+            alertDialog.setMessage("Voce acertou mizerave")
+            alertDialog.show()
+            numeroPontos++
+            atualizaPerguntas()
+
+        }else{
+            val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
+            alertDialog.setTitle("Resultado!")
+            alertDialog.setMessage("Que pena, resposta incorreta :/ ")
+            alertDialog.show()
+            atualizaPerguntas()
+        }
+
     }
 }
 

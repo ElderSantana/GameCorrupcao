@@ -68,6 +68,7 @@
                 android:textColor="#fff"
                 android:textStyle="bold"
                 android:layout_marginBottom="10dp"
+                android:onClick="onClick"
                 />
 
             <Button
@@ -78,7 +79,8 @@
                 android:background="@drawable/bg_alternative"
                 android:textColor="#fff"
                 android:textStyle="bold"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:onClick="onClick"/>
 
             <Button
                 android:id="@+id/alternativa3"
@@ -88,7 +90,8 @@
                 android:background="@drawable/bg_alternative"
                 android:textColor="#fff"
                 android:textStyle="bold"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:onClick="onClick"/>
 
             <Button
                 android:id="@+id/alternativa4"
@@ -98,7 +101,8 @@
                 android:background="@drawable/bg_alternative"
                 android:textColor="#fff"
                 android:textStyle="bold"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:onClick="onClick"/>
         </LinearLayout>
 
 
