@@ -4,7 +4,6 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.elder.quizz.R
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import android.os.CountDownTimer
 import android.support.annotation.RequiresApi
@@ -14,6 +13,7 @@ import android.widget.Toast
 import android.support.v7.widget.Toolbar
 import android.content.Intent
 import com.example.elder.quizz.feature.main.MainActivity
+import kotlinx.android.synthetic.main.activity_game.*
 
 
 class GameActivity : AppCompatActivity() {
@@ -31,7 +31,7 @@ class GameActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_game)
 
         val toolbar = findViewById<View>(R.id.my_toolbar) as Toolbar
         toolbar.navigationContentDescription = "Cont"
@@ -212,10 +212,6 @@ class GameActivity : AppCompatActivity() {
 
     }
 
-    fun home(view: View){
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
 
 
 }

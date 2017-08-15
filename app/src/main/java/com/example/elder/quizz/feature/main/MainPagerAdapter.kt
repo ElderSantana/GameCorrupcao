@@ -4,33 +4,31 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 
-
 /**
  * Created by elder.santos on 14/08/2017.
  */
 
 class MainPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    override fun getItem(index: Int): Fragment? {
+    private val mFragmentList = ArrayList<Fragment>()
+    private val mFragmentTitleList = ArrayList<String>()
 
-        when (index) {
-            0 ->
-                // Top Rated fragment activity
-                return TopRatedFragment()
-            1 ->
-                // Games fragment activity
-                return GamesFragment()
-            2 ->
-                // Movies fragment activity
-                return MoviesFragment()
-        }
 
-        return null
+    override fun getItem(position: Int): Fragment {
+        return mFragmentList[position]
     }
 
     override fun getCount(): Int {
-        // get item count - equal to number of tabs
-        return 3
+        return mFragmentList.size
+    }
+
+    fun addFragment(fragment: Fragment, title: String) {
+        mFragmentList.add(fragment)
+        mFragmentTitleList.add(title)
+    }
+
+    override fun getPageTitle(position: Int): CharSequence {
+        return  ""
     }
 
 }

@@ -3,14 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ff8400" >
+    android:background="#ffec4a" >
 
     <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Home"
         android:textSize="20dp"
-        android:layout_centerInParent="true"/>
+        android:layout_marginBottom="67dp"
+        android:layout_above="@+id/mudar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/mudar"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_alternative"
+        android:text="Jogar"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:onClick="Jogar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>
