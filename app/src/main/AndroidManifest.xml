@@ -18,13 +18,16 @@
             android:name=".feature.main.MainActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-
+        </activity>
+        <activity android:name=".feature.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".feature.resetpassword.ResetPasswordActivity"></activity>
+        <activity android:name=".feature.signup.SignupActivity"></activity>
     </application>
 
 </manifest>

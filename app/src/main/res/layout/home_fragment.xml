@@ -3,30 +3,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffec4a" >
+    android:background="#ffee59" >
 
-    <TextView android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Home"
-        android:textSize="20dp"
-        android:layout_marginBottom="67dp"
-        android:layout_above="@+id/mudar"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <Button
-        android:id="@+id/mudar"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_alternative"
-        android:text="Jogar"
-        android:textColor="#fff"
-        android:textStyle="bold"
-        android:onClick="Jogar"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="News"
+                android:textSize="20dp" />
+
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/button12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Jogar"
+                android:layout_marginRight="10dp"
+                android:textColor="#fff"
+                android:background="@drawable/bg_alternative"
+                android:onClick="Jogar"/>
+
+            <Button
+                android:id="@+id/button11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Convidar"
+                android:textColor="#fff"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/bg_alternative"
+                />
+        </LinearLayout>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+           >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="Ads"
+                android:textSize="20dp" />
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
 
 </RelativeLayout>
