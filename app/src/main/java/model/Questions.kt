@@ -1,15 +1,29 @@
 package model
-import java.io.Serializable
+import com.google.firebase.database.IgnoreExtraProperties
+
+
+
 /**
- * Created by elder.santos on 10/08/2017.
+ * Created by elder.santos on 16/08/2017.
  */
 
+@IgnoreExtraProperties
+class Questions {
+    var pergunta: String = ""
 
-class Questions : Serializable {
+    init {
 
-    var pergunta: String? = null
-
-    fun Questions(pergunta: String) {
-        this.pergunta = pergunta
     }
+
+//    constructor()
+
+    fun constructor(pergunta :String) {
+         this.pergunta = pergunta
+    }
+
+
+
+
+
+
 }

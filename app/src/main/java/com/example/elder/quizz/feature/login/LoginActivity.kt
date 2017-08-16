@@ -71,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
 
             progressBar!!.visibility = View.VISIBLE
 
+
             //authenticate user
             auth!!.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this@LoginActivity) { task ->

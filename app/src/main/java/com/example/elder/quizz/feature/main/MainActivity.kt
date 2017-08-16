@@ -3,18 +3,25 @@ package com.example.elder.quizz.feature.main
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
-import com.example.elder.quizz.R
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
+import android.widget.TextView
+import com.example.elder.quizz.R
 import com.example.elder.quizz.feature.game.GameActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import model.Questions
 
 
 class MainActivity : AppCompatActivity() {
 
-     var viewPager: ViewPager? = null
-     var tabLayout: TabLayout? = null
-     private val tabIcons = intArrayOf(R.drawable.ic_003_home, R.drawable.ic_001_newspaper, R.drawable.ic_menu)
+    var viewPager: ViewPager? = null
+    var tabLayout: TabLayout? = null
+    private val tabIcons = intArrayOf(R.drawable.ic_003_home, R.drawable.ic_001_newspaper, R.drawable.ic_menu)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         tabLayout = findViewById<TabLayout>(R.id.tabs)
         tabLayout?.setupWithViewPager(viewPager)
         setupTabIcons()
+
     }
 
     private fun setupTabIcons() {
@@ -48,12 +56,15 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = adapter
     }
 
-    fun Jogar(view: View){
+    fun Jogar(view: View) {
         val intent = Intent(this, GameActivity::class.java)
         startActivity(intent)
     }
 
 
 }
+
+
+
 
 
