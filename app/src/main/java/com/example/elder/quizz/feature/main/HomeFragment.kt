@@ -2,17 +2,15 @@ package com.example.elder.quizz.feature.main
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.example.elder.quizz.R
 import com.google.firebase.database.*
-import model.Questions
 import com.google.firebase.database.DataSnapshot
-
-
+import com.google.firebase.database.ValueEventListener
+import java.util.*
 
 
 /**
@@ -20,7 +18,7 @@ import com.google.firebase.database.DataSnapshot
  */
 class HomeFragment : Fragment() {
 
-    var listaquestions: ArrayList<String>? = null
+    val questions : HashMap<String, Objects>? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater?.inflate(R.layout.home_fragment, container, false)
@@ -30,45 +28,93 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var mDatabase :DatabaseReference = FirebaseDatabase.getInstance().getReference("questions")
 
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Get Post object and use the values to update the UI
-                for (postSnapshot in dataSnapshot.children) {
+        var questionsREF :DatabaseReference = FirebaseDatabase.getInstance().getReference("alternatives")
 
-                    listaquestions?.add(postSnapshot.toString())
+
+        questionsREF.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                for (postSnapshot in snapshot.children) {
+
+                  questions?.put(postSnapshot.key , postSnapshot.value as Objects)
+                    print(questions)
+
+//                    var texto = view?.findViewById<TextView>(R.id.hometext)
+//                    texto?.text = postSnapshot.value.toString()
+
+
                 }
 
-                var questions = dataSnapshot.getValue<Questions>(Questions::class.java)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
-                Log.w("TAG", "loadPost:onCancelled", databaseError.toException())
-                // ...
+                System.out.println("The read failed: " + databaseError.getMessage())
             }
-        }
-        mDatabase.addValueEventListener(postListener)
+        })
 
+//        questionsREF.addValueEventListener(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                val alternative = snapshot.getValue<Alternatives>(Alternatives::class.java)
+////                    alternative.pergunta
+//
+//                for (postSnapshot in snapshot.children) {
+//                    //Getting the data from snapshot
+////                    val person = postSnapshot.getValue<String>(String::class.java)
+//
+////                    questions.put(postSnapshot)
+//                    postSnapshot
+////                    val alternative = postSnapshot.getValue<Alternatives>(Alternatives::class.java)
+//                    val alternative = snapshot.getValue<Alternatives>(Alternatives::class.java)
+////                    alternative.pergunta
+//
+//                    questions?.put(alternative)
+//
+////                    questions.add(person)
+//
+//
+//                    //Displaying it on textview
+//                    var texto = view?.findViewById<TextView>(R.id.hometext)
+//                    texto?.text = "teste"
+//                }
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                System.out.println("The read failed: " + databaseError.getMessage())
+//            }
+//        })
 
-        var texto = view?.findViewById<TextView>(R.id.hometext)
-        texto?.text = listaquestions?.get(0)
+//        var questionsREF :DatabaseReference = FirebaseDatabase.getInstance().getReference("questions")
+//
+//        questionsREF.addValueEventListener(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                for (postSnapshot in snapshot.children) {
+//                    //Getting the data from snapshot
+//                    val person = postSnapshot.getValue<String>(String::class.java)
+//
+//                    questions.add(person)
+//
+//                    //Displaying it on textview
+//                    var texto = view?.findViewById<TextView>(R.id.hometext)
+//                    texto?.text = questions[0]
+//                }
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                System.out.println("The read failed: " + databaseError.getMessage())
+//            }
+//        })
+
 
 
     }
 
      override fun onStart() {
         super.onStart()
-
-
-
-
     }
-
-
-
-
 }
+
+
+
 
 

@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".feature.resetpassword.ResetPasswordActivity"></activity>
         <activity android:name=".feature.signup.SignupActivity"></activity>
+        <activity android:name=".feature.question.QuestionsActivity"></activity>
+        <activity android:name=".feature.question.QuestionActivity"></activity>
     </application>
 
 </manifest>

@@ -13,6 +13,10 @@ import android.view.View
 import android.widget.Button
 import com.example.elder.quizz.R
 import com.example.elder.quizz.feature.resetpassword.ResetPasswordActivity
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+
+
 
 
 /**
@@ -21,6 +25,7 @@ import com.example.elder.quizz.feature.resetpassword.ResetPasswordActivity
 
 class SignupActivity : AppCompatActivity() {
 
+    private var inputNome: EditText? = null
     private var inputEmail: EditText? = null
     private var inputPassword: EditText? = null
     private var btnSignIn: Button? = null
@@ -38,6 +43,7 @@ class SignupActivity : AppCompatActivity() {
 
         btnSignIn = findViewById<Button>(R.id.sign_in_button)
         btnSignUp = findViewById<Button>(R.id.sign_up_button)
+        inputNome = findViewById<EditText>(R.id.nome)
         inputEmail = findViewById<EditText>(R.id.email)
         inputPassword = findViewById<EditText>(R.id.password)
         progressBar = findViewById<ProgressBar>(R.id.progressBar)
@@ -48,13 +54,20 @@ class SignupActivity : AppCompatActivity() {
         btnSignIn!!.setOnClickListener { finish() }
 
         btnSignUp!!.setOnClickListener(View.OnClickListener {
+            val nome = inputNome!!.text.toString().trim { it <= ' ' }
             val email = inputEmail!!.text.toString().trim { it <= ' ' }
             val password = inputPassword!!.text.toString().trim { it <= ' ' }
+
+            if (TextUtils.isEmpty(nome)) {
+                Toast.makeText(applicationContext, "Digite seu nome", Toast.LENGTH_SHORT).show()
+                return@OnClickListener
+            }
 
             if (TextUtils.isEmpty(email)) {
                 Toast.makeText(applicationContext, "Enter email address!", Toast.LENGTH_SHORT).show()
                 return@OnClickListener
             }
+
 
             if (TextUtils.isEmpty(password)) {
                 Toast.makeText(applicationContext, "Enter password!", Toast.LENGTH_SHORT).show()
@@ -79,6 +92,11 @@ class SignupActivity : AppCompatActivity() {
                             Toast.makeText(this@SignupActivity, "Authentication failed." + task.exception!!,
                                     Toast.LENGTH_SHORT).show()
                         } else {
+                            val database = FirebaseDatabase.getInstance()
+                            val ref = database.getReference("users").child(FirebaseAuth.getInstance().currentUser!!.uid)
+                            ref.child("nome").setValue(inputNome?.text.toString())
+                            ref.child("uid").setValue(FirebaseAuth.getInstance().currentUser!!.uid)
+
                             startActivity(Intent(this@SignupActivity, MainActivity::class.java))
                             finish()
                         }

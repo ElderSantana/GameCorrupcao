@@ -5,16 +5,14 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
-import android.widget.TextView
 import com.example.elder.quizz.R
 import com.example.elder.quizz.feature.game.GameActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import model.Questions
+import com.example.elder.quizz.feature.login.LoginActivity
+import com.example.elder.quizz.feature.question.QuestionsActivity
+import com.google.firebase.auth.FirebaseAuth
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -58,6 +56,17 @@ class MainActivity : AppCompatActivity() {
 
     fun Jogar(view: View) {
         val intent = Intent(this, GameActivity::class.java)
+        startActivity(intent)
+    }
+    fun Add(view: View) {
+        val intent = Intent(this, QuestionsActivity::class.java)
+        startActivity(intent)
+    }
+    fun Singout(view: View){
+        val fAuth = FirebaseAuth.getInstance()
+        fAuth.signOut()
+
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
 
