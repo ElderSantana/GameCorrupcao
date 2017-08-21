@@ -6,13 +6,11 @@ import com.example.elder.quizz.R
 import java.util.*
 import android.os.CountDownTimer
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Toast
 import android.support.v7.widget.Toolbar
+import android.widget.ProgressBar
 import android.widget.TextView
-import com.example.elder.quizz.feature.question.QuestionsAdapter
 import kotlinx.android.synthetic.main.activity_game.*
 import model.Alternatives
 import model.Awnsers
@@ -46,6 +44,14 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game)
 
         val toolbar = findViewById<View>(R.id.my_toolbar) as Toolbar
+
+//        progressbar.incrementProgressBy(5)
+//        if (progressbar.progress == progressbar.max) {
+//
+//            progressbar.visibility = View.INVISIBLE
+//        } else {
+//            progressbar.progress
+//        }
         toolbar.navigationContentDescription = "Cont"
         setSupportActionBar(toolbar)
 
@@ -113,7 +119,9 @@ class GameActivity : AppCompatActivity() {
 
                      object : CountDownTimer(30000, 1000) {
                          override fun onTick(millisUntilFinished: Long) {
-                             textView.text = (millisUntilFinished / 1000).toString()
+                             var progressbar = findViewById<ProgressBar>(R.id.determinateBar)
+                             progressbar.progress = (millisUntilFinished / 300).toInt()
+
                          }
                          override fun onFinish() {
                              if(numeroalternativa == 0){
@@ -255,7 +263,7 @@ class GameActivity : AppCompatActivity() {
             numeroPontos = 0
             numeroRespostas = 0
             numeroPergunta =  0
-            numeroErros = 1
+            numeroErros = 0
             numeroalternativa = 0
             atualizaPerguntas(questions)
 
