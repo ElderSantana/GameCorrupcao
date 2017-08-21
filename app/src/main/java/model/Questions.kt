@@ -6,7 +6,7 @@ import com.google.firebase.database.IgnoreExtraProperties
  */
 
 @IgnoreExtraProperties
-class Questions {
+class Questions  {
     var questionId: String = ""
     var questionTitle: String = ""
     var year: String = ""
