@@ -9,15 +9,17 @@ import com.google.firebase.database.IgnoreExtraProperties
 class Questions  {
     var questionId: String = ""
     var questionTitle: String = ""
+    var questionFont: String = ""
     var year: String = ""
 
     constructor() {
         //this constructor is required
     }
 
-    constructor(questionId: String, question: String, year: String) {
+    constructor(questionId: String, question: String,  font: String, year: String) {
         this.questionId = questionId
         this.questionTitle = question
+        this.questionFont = font
         this.year = year
 
     }

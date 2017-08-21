@@ -16,14 +16,21 @@
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:textStyle="bold"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="43dp" />
 
     <EditText
-        android:layout_below="@id/textViewArtist"
         android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter track name" />
+        android:hint="Digite a pergunta"
+        android:layout_below="@+id/textViewArtist"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 
     <LinearLayout
         android:orientation="horizontal"

@@ -23,6 +23,7 @@ class QuestionsActivity : AppCompatActivity() {
 
     //view objects
     var editTextName: EditText? = null
+    var editTextFont: EditText? = null
     var spinnerYear: Spinner? = null
     var listViewQuestions: ListView? = null
 
@@ -41,6 +42,7 @@ class QuestionsActivity : AppCompatActivity() {
 
         //getting views
         editTextName = findViewById<EditText>(R.id.editTextName)
+        editTextName = findViewById<EditText>(R.id.editTextFont)
         spinnerYear = findViewById<Spinner>(R.id.spinnerYear)
 //        listViewQuestions = findViewById<ListView>(R.id.listViewQuestions)
 
@@ -97,6 +99,7 @@ class QuestionsActivity : AppCompatActivity() {
     private fun addArtist() {
         //getting the values to save
         val name = editTextName?.text.toString().trim { it <= ' ' }
+        val font = editTextFont?.text.toString().trim { it <= ' ' }
         val year = spinnerYear?.selectedItem.toString()
 
         //checking if the value is provided
@@ -107,7 +110,7 @@ class QuestionsActivity : AppCompatActivity() {
             val id = databaseQuestions!!.push().key
 
             //creating an Artist Object
-            val artist = Questions(id, name, year)
+            val artist = Questions(id, name, year, font)
 
             //Saving the Artist
             databaseQuestions!!.child(id).setValue(artist)

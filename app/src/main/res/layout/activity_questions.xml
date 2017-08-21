@@ -18,21 +18,37 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <EditText
+        android:id="@+id/editTextFont"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fonte da pergunta"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/editTextName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <Spinner
         android:id="@+id/spinnerYear"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/editTextName"
-        android:entries="@array/years"></Spinner>
+        android:entries="@array/years"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/editTextFont"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"></Spinner>
 
     <Button
         android:id="@+id/buttonAddQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spinnerYear"
         android:text="Salvar"
         android:textColor="#fff"
-        android:background="@drawable/bg_alternative"/>
+        android:background="@drawable/bg_alternative"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/spinnerYear"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/textView"

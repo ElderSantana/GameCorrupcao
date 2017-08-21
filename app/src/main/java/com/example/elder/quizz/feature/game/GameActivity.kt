@@ -1,26 +1,39 @@
 package com.example.elder.quizz.feature.game
 
-import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.elder.quizz.R
 import java.util.*
 import android.os.CountDownTimer
-import android.support.annotation.RequiresApi
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Toast
 import android.support.v7.widget.Toolbar
-import android.content.Intent
-import com.example.elder.quizz.feature.main.MainActivity
+import android.widget.TextView
+import com.example.elder.quizz.feature.question.QuestionsAdapter
 import kotlinx.android.synthetic.main.activity_game.*
+import model.Alternatives
+import model.Awnsers
+import model.Questions
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.DatabaseReference
 
 
 class GameActivity : AppCompatActivity() {
 
-    val perguntas = arrayListOf<String>()
-    val alternativas = HashMap<Int, List<String>>()
-    val respostas = arrayListOf(2,2,2,2)
+    var questions: ArrayList<Questions>? = null
+    var alternatives: List<Alternatives>? = ArrayList()
+    var awnsers: List<Awnsers>? = ArrayList()
+    var idalternative : String = ""
+
+    var DatabaseReference: DatabaseReference? = null
+    var QuestionReference: DatabaseReference? = null
+
     var numeroPergunta : Int = 0
     var numeroRespostas : Int = 0
     var numeroalternativa: Int = 0
@@ -28,7 +41,6 @@ class GameActivity : AppCompatActivity() {
     var numeroErros : Int = 1
 
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -37,109 +49,203 @@ class GameActivity : AppCompatActivity() {
         toolbar.navigationContentDescription = "Cont"
         setSupportActionBar(toolbar)
 
-        prepararLista()
-        atualizaPerguntas()
-    }
+        //clearing the previous artist list
+//        (questions as ArrayList<Questions>).clear()
+        //list to store artists
+        questions = ArrayList()
 
 
-    fun prepararLista(){
+        //get all questions
+        QuestionReference = FirebaseDatabase.getInstance().getReference("questions")
+        QuestionReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-        perguntas.add("Qual valor de PI?")
-        perguntas.add("Qual o nome do presidente que sofreu iptman em 2016?")
-        perguntas.add("Quem mais roubou em  em 2017")
-        perguntas.add("Qual o numero da sorte?")
+                //iterating through all the nodes
+                for (postSnapshot in dataSnapshot.children) {
+                    //getting artist
+                    val question = postSnapshot.getValue<Questions>(Questions::class.java)
+                    //adding artist to the list
+                    (questions as ArrayList<Questions>).add(question)
 
+                }
 
-        // adicionando alternativas
-        val primeira = ArrayList<String>()
-        primeira.add("3,14")
-        primeira.add("5")
-        primeira.add("9")
-        primeira.add("5,21")
+                //attaching adapter to the recycleview
+                var texto = findViewById<TextView>(R.id.pergunta)
+                texto.text =   questions?.size.toString()
 
-        val segunda = ArrayList<String>()
-        segunda.add("Michel Temer")
-        segunda.add("Dilma Rulsef")
-        segunda.add("Eneias ")
-        segunda.add("Bolsolixo")
+                atualizaPerguntas(questions!!)
+            }
 
-        val terceira = ArrayList<String>()
-        terceira.add("Michel Temer")
-        terceira.add("Michel Temer2")
-        terceira.add("Michel Temer3")
-        terceira.add("Michel Temer4")
+            override fun onCancelled(databaseError: DatabaseError) {
 
-        val quarta = ArrayList<String>()
-        quarta.add("Michel Temer")
-        quarta.add("Vampirao")
-        quarta.add("vamp")
-        quarta.add("cuz")
-
-
-        // adicionando a respostas
-        alternativas.put(0 ,primeira )
-        alternativas.put(1 ,segunda)
-        alternativas.put(2 ,terceira)
-        alternativas.put(3 ,quarta)
+            }
+        })
 
     }
 
-     fun atualizaPerguntas() {
 
-         if(perguntas.size == numeroPergunta){
+    fun atualizaPerguntas(questions: ArrayList<Questions> ) {
 
-             alertaResultado()
+
+         if(questions!!.size == numeroPergunta){
+
+
+             alertaResultado(questions)
 
          }else{
 
+             // get the alternatives for the current question
+             DatabaseReference = FirebaseDatabase.getInstance().getReference("alternatives").child(questions!![numeroPergunta].questionId)
+             DatabaseReference!!.addValueEventListener(object : ValueEventListener {
+                 override fun onDataChange(dataSnapshot: DataSnapshot) {
+                     (alternatives as ArrayList<Alternatives>).clear()
 
-             pergunta.text = perguntas[numeroPergunta]
-             alternativa1.text = alternativas[numeroPergunta]?.get(0)
-             alternativa2.text = alternativas[numeroPergunta]?.get(1)
-             alternativa3.text = alternativas[numeroPergunta]?.get(2)
-             alternativa4.text = alternativas[numeroPergunta]?.get(3)
-
-             object : CountDownTimer(30000, 1000) {
-                 override fun onTick(millisUntilFinished: Long) {
-                     textView.text = (millisUntilFinished / 1000).toString()
-                 }
-                 override fun onFinish() {
-                     if(numeroalternativa == 0){
-
-                         numeroErros++
-                         atualizaPerguntas()
-                     }else
-                     {
-                         atualizaPerguntas()
-                     }
-                     if (numeroErros > 3){
-
-                         val alertDialog: AlertDialog = AlertDialog.Builder(this@GameActivity).create()
-                         alertDialog.setTitle("Game Over")
-                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Reiniciar", {
-                             dialogInterface, i ->
-
-                             numeroPontos = 0
-                             numeroRespostas = 0
-                             numeroPergunta =  0
-                             numeroErros = 1
-                             numeroalternativa = 0
-                             atualizaPerguntas()
-                         })
-
-                         alertDialog.show()
-
+                     for (postSnapshot in dataSnapshot.children) {
+                         val alternative = postSnapshot.getValue<Alternatives>(Alternatives::class.java)
+                         (alternatives as ArrayList<Alternatives>).add(alternative)
                      }
 
+                     pergunta.text = questions!![numeroPergunta].questionTitle
+                     alternativa1.text = alternatives!![0].alternativeTitle
+                     alternativa2.text = alternatives!![1].alternativeTitle
+                     alternativa3.text = alternatives!![2].alternativeTitle
+                     alternativa4.text = alternatives!![3].alternativeTitle
+
+                     object : CountDownTimer(30000, 1000) {
+                         override fun onTick(millisUntilFinished: Long) {
+                             textView.text = (millisUntilFinished / 1000).toString()
+                         }
+                         override fun onFinish() {
+                             if(numeroalternativa == 0){
+
+                                 numeroErros++
+                                 atualizaPerguntas(questions)
+                             }else
+                             {
+                                 atualizaPerguntas(questions)
+                             }
+                             if (numeroErros > 3){
+
+                                 val alertDialog: AlertDialog = AlertDialog.Builder(this@GameActivity).create()
+                                 alertDialog.setTitle("Game Over")
+                                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Reiniciar", {
+                                     dialogInterface, i ->
+
+                                     numeroPontos = 0
+                                     numeroRespostas = 0
+                                     numeroPergunta =  0
+                                     numeroErros = 0
+                                     numeroalternativa = 0
+                                     atualizaPerguntas(questions)
+                                 })
+
+                                 alertDialog.show()
+
+                             }
+
+                         }
+                     }.start()
+                     numeroPergunta++
+                     numeroalternativa = 0
+
                  }
-             }.start()
-             numeroPergunta++
-             numeroalternativa = 0
+
+                 override fun onCancelled(databaseError: DatabaseError) {
+
+                 }
+             })
 
          }
-     }
+    }
 
-    fun alertaResultado() {
+    // to check if the awnser is correct
+    fun checaResposta(v: View) {
+
+        // get the correct awnser
+        DatabaseReference = FirebaseDatabase.getInstance().getReference("awnsers").child( questions!![numeroPergunta-1].questionId)
+        DatabaseReference!!.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                (awnsers as ArrayList<Awnsers>).clear()
+
+                for (postSnapshot in dataSnapshot.children) {
+                    val awnser = postSnapshot.getValue<Awnsers>(Awnsers::class.java)
+                    (awnsers as ArrayList<Awnsers>).add(awnser)
+                }
+
+                // get the alternatives for the current question
+                DatabaseReference = FirebaseDatabase.getInstance().getReference("alternatives").child(questions!![numeroPergunta-1].questionId)
+                DatabaseReference!!.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        (alternatives as ArrayList<Alternatives>).clear()
+
+                        for (postSnapshot in dataSnapshot.children) {
+                            val alternative = postSnapshot.getValue<Alternatives>(Alternatives::class.java)
+                            (alternatives as ArrayList<Alternatives>).add(alternative)
+                        }
+
+                        when (v.id) {
+                            R.id.alternativa1 -> idalternative = alternatives!![0].alternativeId
+                            R.id.alternativa2 -> idalternative = alternatives!![1].alternativeId
+                            R.id.alternativa3 -> idalternative = alternatives!![2].alternativeId
+                            R.id.alternativa4 -> idalternative = alternatives!![3].alternativeId
+                        }
+
+                        if(idalternative == awnsers!![0].AlternativeId){
+
+                            val context = applicationContext
+                            val text = "Resposta correta!"
+                            val duration = Toast.LENGTH_SHORT
+                            val toast = Toast.makeText(context, text, duration)
+                            toast.show()
+                            numeroPontos++
+                            atualizaPerguntas(questions!!)
+
+                        }else{
+
+                            if (numeroErros == 3){
+                                val alertDialog: AlertDialog = AlertDialog.Builder(applicationContext).create()
+                                alertDialog.setTitle("Game Over")
+                                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Reiniciar", {
+                                    dialogInterface, i ->
+
+                                    numeroPontos = 0
+                                    numeroRespostas = 0
+                                    numeroPergunta =  0
+                                    numeroErros = 1
+                                    numeroalternativa = 0
+                                    atualizaPerguntas(questions!!)
+                                })
+
+                                alertDialog.show()
+
+                            }else{
+
+                                val context = applicationContext
+                                val text = "Que pena, resposta incorreta :/"
+                                val duration = Toast.LENGTH_SHORT
+                                val toast = Toast.makeText(context, text, duration)
+                                toast.show()
+                                numeroErros++
+                                atualizaPerguntas(questions!!)
+                            }
+                        }
+
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {
+
+                    }
+                })
+
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        })
+        numeroRespostas++
+
+    }
+
+    fun alertaResultado(questions: ArrayList<Questions>) {
         val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
         alertDialog.setTitle("Resultado final")
         alertDialog.setMessage("Voce acertou $numeroPontos mizerave")
@@ -151,69 +257,10 @@ class GameActivity : AppCompatActivity() {
             numeroPergunta =  0
             numeroErros = 1
             numeroalternativa = 0
-            atualizaPerguntas()
+            atualizaPerguntas(questions)
 
         })
         alertDialog.show()
     }
 
-
-    // to check if the awnser is correct
-    fun checaResposta(v: View) {
-
-        when (v.id) {
-            R.id.alternativa1 -> numeroalternativa = 1
-            R.id.alternativa2 -> numeroalternativa = 2
-            R.id.alternativa3 -> numeroalternativa = 3
-            R.id.alternativa4 -> numeroalternativa = 4
-        }
-
-        if(numeroalternativa == respostas[numeroRespostas]){
-
-            val context = applicationContext
-            val text = "Resposta correta!"
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
-            numeroPontos++
-            atualizaPerguntas()
-
-        }else{
-
-            if (numeroErros == 3){
-                val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
-                alertDialog.setTitle("Game Over")
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Reiniciar", {
-                    dialogInterface, i ->
-
-                    numeroPontos = 0
-                    numeroRespostas = 0
-                    numeroPergunta =  0
-                    numeroErros = 1
-                    numeroalternativa = 0
-                    atualizaPerguntas()
-                })
-
-                alertDialog.show()
-
-            }else{
-
-                val context = applicationContext
-                val text = "Que pena, resposta incorreta :/"
-                val duration = Toast.LENGTH_SHORT
-                val toast = Toast.makeText(context, text, duration)
-                toast.show()
-                numeroErros++
-                atualizaPerguntas()
-            }
-        }
-
-        numeroRespostas++
-
-    }
-
-
-
 }
-
-
