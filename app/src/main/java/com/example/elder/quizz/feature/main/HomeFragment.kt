@@ -18,6 +18,9 @@ import model.Awnsers
 import model.Questions
 import java.util.*
 import kotlin.collections.HashMap
+import android.widget.Toast
+import android.view.Gravity
+import android.widget.ImageView
 
 
 /**
@@ -35,39 +38,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        databaseAwnsers = FirebaseDatabase.getInstance().getReference("awnsers").child("-KrqSq0YFeouTeUQtVyb")
-        databaseAwnsers.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                (questions as ArrayList<Awnsers>).clear()
-
-                for (postSnapshot in dataSnapshot.children) {
-                    val question = postSnapshot.getValue<Awnsers>(Awnsers::class.java)
-                    (questions as ArrayList<Awnsers>).add(question)
-                }
-
-                var texto = view?.findViewById<TextView>(R.id.hometext)
-                texto?.text = questions[0].AlternativeId
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-        })
 
 
-//        to questions and alternative
-//        databaseAwnsers = FirebaseDatabase.getInstance().getReference("questions")
+//        databaseAwnsers = FirebaseDatabase.getInstance().getReference("awnsers").child("-KrqSq0YFeouTeUQtVyb")
 //        databaseAwnsers.addValueEventListener(object : ValueEventListener {
 //            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                (questions as ArrayList<Questions>).clear()
+//                (questions as ArrayList<Awnsers>).clear()
 //
 //                for (postSnapshot in dataSnapshot.children) {
-//                    val question = postSnapshot.getValue<Questions>(Questions::class.java)
-//                    (questions as ArrayList<Questions>).add(question)
+//                    val question = postSnapshot.getValue<Awnsers>(Awnsers::class.java)
+//                    (questions as ArrayList<Awnsers>).add(question)
 //                }
 //
 //                var texto = view?.findViewById<TextView>(R.id.hometext)
-//                texto?.text = questions[0].questionTitle
+//                texto?.text = questions[0].AlternativeId
 //            }
 //
 //            override fun onCancelled(databaseError: DatabaseError) {

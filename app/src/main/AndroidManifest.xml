@@ -11,12 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".feature.game.GameActivity"></activity>
+        <activity android:name=".feature.game.GameActivity" />
         <activity
             android:name=".feature.main.MainActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity android:name=".feature.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,10 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".feature.resetpassword.ResetPasswordActivity"></activity>
-        <activity android:name=".feature.signup.SignupActivity"></activity>
-        <activity android:name=".feature.question.QuestionsActivity"></activity>
-        <activity android:name=".feature.question.QuestionActivity"></activity>
+        <activity android:name=".feature.resetpassword.ResetPasswordActivity" />
+        <activity android:name=".feature.signup.SignupActivity" />
+        <activity android:name=".feature.question.QuestionsActivity" />
+        <activity android:name=".feature.question.QuestionActivity" />
+        <activity android:name=".feature.game.ResultActivity"></activity>
     </application>
 
 </manifest>

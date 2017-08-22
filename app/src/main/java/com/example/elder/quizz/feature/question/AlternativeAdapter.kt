@@ -44,7 +44,7 @@ class AlternativesAdapter(var context: Activity, val alternatives: List<Alternat
 
                 //  holder?.alternative?.setBackgroundResource(R.color.bg_login)
                 val awnser = Awnsers(alternatives.alternativeId)
-                databaseAwnsers!!.child(alternatives.alternativeId).setValue(awnser)
+                databaseAwnsers!!.child(idquestion).setValue(awnser)
                 Toast.makeText(context, "Questão adicionada como correta", Toast.LENGTH_LONG).show()
 
             })

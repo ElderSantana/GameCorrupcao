@@ -42,7 +42,7 @@ class QuestionsActivity : AppCompatActivity() {
 
         //getting views
         editTextName = findViewById<EditText>(R.id.editTextName)
-        editTextName = findViewById<EditText>(R.id.editTextFont)
+        editTextFont = findViewById<EditText>(R.id.editTextFont)
         spinnerYear = findViewById<Spinner>(R.id.spinnerYear)
 //        listViewQuestions = findViewById<ListView>(R.id.listViewQuestions)
 
@@ -110,7 +110,7 @@ class QuestionsActivity : AppCompatActivity() {
             val id = databaseQuestions!!.push().key
 
             //creating an Artist Object
-            val artist = Questions(id, name, year, font)
+            val artist = Questions(id, name, font, year )
 
             //Saving the Artist
             databaseQuestions!!.child(id).setValue(artist)
@@ -126,10 +126,4 @@ class QuestionsActivity : AppCompatActivity() {
         }
     }
 
-//    companion object {
-//
-//        //we will use these constants later to pass the artist name and id to another activity
-//        val QUESTION_NAME = "net.simplifiedcoding.firebasedatabaseexample.artistname"
-//        val QUESTION_ID = "net.simplifiedcoding.firebasedatabaseexample.artistid"
-//    }
 }

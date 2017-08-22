@@ -1,5 +1,6 @@
 package com.example.elder.quizz.feature.game
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.elder.quizz.R
@@ -9,6 +10,8 @@ import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.Toast
 import android.support.v7.widget.Toolbar
+import android.view.Gravity
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_game.*
@@ -25,7 +28,7 @@ import com.google.firebase.database.DatabaseReference
 class GameActivity : AppCompatActivity() {
 
     var questions: ArrayList<Questions>? = null
-    var alternatives: List<Alternatives>? = ArrayList()
+    var alternatives: List<Alternatives>? = null
     var awnsers: List<Awnsers>? = ArrayList()
     var idalternative : String = ""
 
@@ -45,13 +48,6 @@ class GameActivity : AppCompatActivity() {
 
         val toolbar = findViewById<View>(R.id.my_toolbar) as Toolbar
 
-//        progressbar.incrementProgressBy(5)
-//        if (progressbar.progress == progressbar.max) {
-//
-//            progressbar.visibility = View.INVISIBLE
-//        } else {
-//            progressbar.progress
-//        }
         toolbar.navigationContentDescription = "Cont"
         setSupportActionBar(toolbar)
 
@@ -92,9 +88,8 @@ class GameActivity : AppCompatActivity() {
 
     fun atualizaPerguntas(questions: ArrayList<Questions> ) {
 
-
+         alternatives = ArrayList()
          if(questions!!.size == numeroPergunta){
-
 
              alertaResultado(questions)
 
@@ -132,22 +127,23 @@ class GameActivity : AppCompatActivity() {
                              {
                                  atualizaPerguntas(questions)
                              }
-                             if (numeroErros > 3){
+                             if (numeroErros == 3){
 
-                                 val alertDialog: AlertDialog = AlertDialog.Builder(this@GameActivity).create()
-                                 alertDialog.setTitle("Game Over")
-                                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Reiniciar", {
-                                     dialogInterface, i ->
-
-                                     numeroPontos = 0
-                                     numeroRespostas = 0
-                                     numeroPergunta =  0
-                                     numeroErros = 0
-                                     numeroalternativa = 0
-                                     atualizaPerguntas(questions)
-                                 })
-
-                                 alertDialog.show()
+//                                 val alertDialog: AlertDialog = AlertDialog.Builder(this@GameActivity).create()
+//                                 alertDialog.setTitle("Game Over")
+//                                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Reiniciar", {
+//                                     dialogInterface, i ->
+//
+//                                     numeroPontos = 0
+//                                     numeroRespostas = 0
+//                                     numeroPergunta =  0
+//                                     numeroErros = 0
+//                                     numeroalternativa = 0
+//                                     atualizaPerguntas(questions)
+//                                 })
+//
+//                                 alertDialog.show()
+                                 alertaResultado(questions)
 
                              }
 
@@ -200,39 +196,59 @@ class GameActivity : AppCompatActivity() {
 
                         if(idalternative == awnsers!![0].AlternativeId){
 
-                            val context = applicationContext
-                            val text = "Resposta correta!"
-                            val duration = Toast.LENGTH_SHORT
-                            val toast = Toast.makeText(context, text, duration)
+
+                            val inflater = layoutInflater
+                            val layout = inflater.inflate(R.layout.toast, findViewById<ViewGroup>(R.id.toast_layout_root)  )
+
+                            val toast = Toast(applicationContext)
+                            toast.setGravity(Gravity.TOP, 0, 0)
+                            toast.duration = Toast.LENGTH_SHORT
+                            toast.view = layout
                             toast.show()
+
+//                            val context = applicationContext
+//                            val text = "Resposta correta!"
+//                            val duration = Toast.LENGTH_SHORT
+//                            val toast = Toast.makeText(context, text, duration)
+//                            toast.show()
                             numeroPontos++
                             atualizaPerguntas(questions!!)
 
                         }else{
 
                             if (numeroErros == 3){
-                                val alertDialog: AlertDialog = AlertDialog.Builder(applicationContext).create()
-                                alertDialog.setTitle("Game Over")
-                                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Reiniciar", {
-                                    dialogInterface, i ->
 
-                                    numeroPontos = 0
-                                    numeroRespostas = 0
-                                    numeroPergunta =  0
-                                    numeroErros = 1
-                                    numeroalternativa = 0
-                                    atualizaPerguntas(questions!!)
-                                })
-
-                                alertDialog.show()
+                                alertaResultado(questions!!)
+//                                val alertDialog: AlertDialog = AlertDialog.Builder(applicationContext).create()
+//                                alertDialog.setTitle("Game Over")
+//                                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Reiniciar", {
+//                                    dialogInterface, i ->
+//
+//                                    numeroPontos = 0
+//                                    numeroRespostas = 0
+//                                    numeroPergunta =  0
+//                                    numeroErros = 1
+//                                    numeroalternativa = 0
+//                                    atualizaPerguntas(questions!!)
+//                                })
+//
+//                                alertDialog.show()
 
                             }else{
 
-                                val context = applicationContext
-                                val text = "Que pena, resposta incorreta :/"
-                                val duration = Toast.LENGTH_SHORT
-                                val toast = Toast.makeText(context, text, duration)
+                                val inflater = layoutInflater
+                                val layout = inflater.inflate(R.layout.toast_wrong, findViewById<ViewGroup>(R.id.toast_layout_root)  )
+                                val toast = Toast(applicationContext)
+                                toast.setGravity(Gravity.TOP, 0, 0)
+                                toast.duration = Toast.LENGTH_SHORT
+                                toast.view = layout
                                 toast.show()
+
+//                                val context = applicationContext
+//                                val text = "Que pena, resposta incorreta :/"
+//                                val duration = Toast.LENGTH_SHORT
+//                                val toast = Toast.makeText(context, text, duration)
+//                                toast.show()
                                 numeroErros++
                                 atualizaPerguntas(questions!!)
                             }
@@ -254,21 +270,34 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun alertaResultado(questions: ArrayList<Questions>) {
-        val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
-        alertDialog.setTitle("Resultado final")
-        alertDialog.setMessage("Voce acertou $numeroPontos mizerave")
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Reiniciar", {
-            dialogInterface, i ->
 
-            numeroPontos = 0
-            numeroRespostas = 0
-            numeroPergunta =  0
-            numeroErros = 0
-            numeroalternativa = 0
-            atualizaPerguntas(questions)
 
-        })
-        alertDialog.show()
+
+        val intent = Intent(this, ResultActivity::class.java)
+        intent.putExtra("pontuacao", numeroPontos )
+        startActivity(intent)
+        numeroPontos = 0
+        numeroRespostas = 0
+        numeroPergunta =  0
+        numeroErros = 0
+        numeroalternativa = 0
+
+
+//        val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
+//        alertDialog.setTitle("Resultado final")
+//        alertDialog.setMessage("Voce acertou $numeroPontos mizerave")
+//        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Reiniciar", {
+//            dialogInterface, i ->
+//
+//            numeroPontos = 0
+//            numeroRespostas = 0
+//            numeroPergunta =  0
+//            numeroErros = 0
+//            numeroalternativa = 0
+//            atualizaPerguntas(questions)
+//
+//        })
+//        alertDialog.show()
     }
 
 }
