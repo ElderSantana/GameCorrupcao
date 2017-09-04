@@ -6,7 +6,6 @@ import android.os.Bundle
 import com.example.elder.quizz.R
 import java.util.*
 import android.os.CountDownTimer
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.Toast
 import android.support.v7.widget.Toolbar
@@ -23,6 +22,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
+import kotlinx.android.synthetic.main.toast.view.*
 
 
 class GameActivity : AppCompatActivity() {
@@ -35,9 +35,9 @@ class GameActivity : AppCompatActivity() {
     var DatabaseReference: DatabaseReference? = null
     var QuestionReference: DatabaseReference? = null
 
+    var countdown : CountDownTimer? = null
     var numeroPergunta : Int = 0
     var numeroRespostas : Int = 0
-    var numeroalternativa: Int = 0
     var numeroPontos : Int = 0
     var numeroErros : Int = 1
 
@@ -51,8 +51,7 @@ class GameActivity : AppCompatActivity() {
         toolbar.navigationContentDescription = "Cont"
         setSupportActionBar(toolbar)
 
-        //clearing the previous artist list
-//        (questions as ArrayList<Questions>).clear()
+
         //list to store artists
         questions = ArrayList()
 
@@ -70,11 +69,9 @@ class GameActivity : AppCompatActivity() {
                     (questions as ArrayList<Questions>).add(question)
 
                 }
-
-                //attaching adapter to the recycleview
-                var texto = findViewById<TextView>(R.id.pergunta)
-                texto.text =   questions?.size.toString()
-
+//                //attaching adapter to the recycleview
+//                var texto = findViewById<TextView>(R.id.pergunta)
+//                texto.text =   questions?.size.toString()
                 atualizaPerguntas(questions!!)
             }
 
@@ -84,7 +81,6 @@ class GameActivity : AppCompatActivity() {
         })
 
     }
-
 
     fun atualizaPerguntas(questions: ArrayList<Questions> ) {
 
@@ -112,14 +108,13 @@ class GameActivity : AppCompatActivity() {
                      alternativa3.text = alternatives!![2].alternativeTitle
                      alternativa4.text = alternatives!![3].alternativeTitle
 
-                     object : CountDownTimer(30000, 1000) {
+                     countdown = object : CountDownTimer(30000, 1000) {
                          override fun onTick(millisUntilFinished: Long) {
-                             var progressbar = findViewById<ProgressBar>(R.id.determinateBar)
-                             progressbar.progress = (millisUntilFinished / 300).toInt()
+                             determinateBar.progress = (millisUntilFinished / 300).toInt()
 
                          }
                          override fun onFinish() {
-                             if(numeroalternativa == 0){
+                             if(idalternative == ""){
 
                                  numeroErros++
                                  atualizaPerguntas(questions)
@@ -129,28 +124,16 @@ class GameActivity : AppCompatActivity() {
                              }
                              if (numeroErros == 3){
 
-//                                 val alertDialog: AlertDialog = AlertDialog.Builder(this@GameActivity).create()
-//                                 alertDialog.setTitle("Game Over")
-//                                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Reiniciar", {
-//                                     dialogInterface, i ->
-//
-//                                     numeroPontos = 0
-//                                     numeroRespostas = 0
-//                                     numeroPergunta =  0
-//                                     numeroErros = 0
-//                                     numeroalternativa = 0
-//                                     atualizaPerguntas(questions)
-//                                 })
-//
-//                                 alertDialog.show()
                                  alertaResultado(questions)
 
                              }
-
                          }
-                     }.start()
+                     }
+                     countdown?.start()
+
+                     determinateBar.progress = 100
                      numeroPergunta++
-                     numeroalternativa = 0
+                     idalternative = ""
 
                  }
 
@@ -206,11 +189,6 @@ class GameActivity : AppCompatActivity() {
                             toast.view = layout
                             toast.show()
 
-//                            val context = applicationContext
-//                            val text = "Resposta correta!"
-//                            val duration = Toast.LENGTH_SHORT
-//                            val toast = Toast.makeText(context, text, duration)
-//                            toast.show()
                             numeroPontos++
                             atualizaPerguntas(questions!!)
 
@@ -219,20 +197,6 @@ class GameActivity : AppCompatActivity() {
                             if (numeroErros == 3){
 
                                 alertaResultado(questions!!)
-//                                val alertDialog: AlertDialog = AlertDialog.Builder(applicationContext).create()
-//                                alertDialog.setTitle("Game Over")
-//                                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Reiniciar", {
-//                                    dialogInterface, i ->
-//
-//                                    numeroPontos = 0
-//                                    numeroRespostas = 0
-//                                    numeroPergunta =  0
-//                                    numeroErros = 1
-//                                    numeroalternativa = 0
-//                                    atualizaPerguntas(questions!!)
-//                                })
-//
-//                                alertDialog.show()
 
                             }else{
 
@@ -243,12 +207,6 @@ class GameActivity : AppCompatActivity() {
                                 toast.duration = Toast.LENGTH_SHORT
                                 toast.view = layout
                                 toast.show()
-
-//                                val context = applicationContext
-//                                val text = "Que pena, resposta incorreta :/"
-//                                val duration = Toast.LENGTH_SHORT
-//                                val toast = Toast.makeText(context, text, duration)
-//                                toast.show()
                                 numeroErros++
                                 atualizaPerguntas(questions!!)
                             }
@@ -265,13 +223,12 @@ class GameActivity : AppCompatActivity() {
 
             }
         })
+        countdown?.cancel()
         numeroRespostas++
 
     }
 
     fun alertaResultado(questions: ArrayList<Questions>) {
-
-
 
         val intent = Intent(this, ResultActivity::class.java)
         intent.putExtra("pontuacao", numeroPontos )
@@ -280,24 +237,8 @@ class GameActivity : AppCompatActivity() {
         numeroRespostas = 0
         numeroPergunta =  0
         numeroErros = 0
-        numeroalternativa = 0
+        idalternative = ""
 
-
-//        val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
-//        alertDialog.setTitle("Resultado final")
-//        alertDialog.setMessage("Voce acertou $numeroPontos mizerave")
-//        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Reiniciar", {
-//            dialogInterface, i ->
-//
-//            numeroPontos = 0
-//            numeroRespostas = 0
-//            numeroPergunta =  0
-//            numeroErros = 0
-//            numeroalternativa = 0
-//            atualizaPerguntas(questions)
-//
-//        })
-//        alertDialog.show()
     }
 
 }
