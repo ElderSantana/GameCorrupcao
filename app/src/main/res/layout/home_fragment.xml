@@ -78,20 +78,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="20dp">
 
 
             <Button
                 android:id="@+id/addQ"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Adicionar pergunta"
                 android:textColor="#fff"
-                android:layout_marginLeft="10dp"
                 android:background="@drawable/bg_alternative"
                 android:onClick="Add"
+                android:layout_marginBottom="20dp"
+                />
+            <Button
+                android:id="@+id/addN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Adicionar Noticia"
+                android:textColor="#fff"
+                android:background="@drawable/bg_alternative"
+                android:onClick="AddN"
                 />
         </LinearLayout>
 

@@ -11,8 +11,6 @@ import android.widget.Toast
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_game.*
 import model.Alternatives
 import model.Awnsers
@@ -22,7 +20,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
-import kotlinx.android.synthetic.main.toast.view.*
 
 
 class GameActivity : AppCompatActivity() {

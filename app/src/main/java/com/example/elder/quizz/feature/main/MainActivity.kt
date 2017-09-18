@@ -9,6 +9,7 @@ import android.view.View
 import com.example.elder.quizz.R
 import com.example.elder.quizz.feature.game.GameActivity
 import com.example.elder.quizz.feature.login.LoginActivity
+import com.example.elder.quizz.feature.question.NewsActivity
 import com.example.elder.quizz.feature.question.QuestionsActivity
 import com.google.firebase.auth.FirebaseAuth
 
@@ -60,6 +61,10 @@ class MainActivity : AppCompatActivity() {
     }
     fun Add(view: View) {
         val intent = Intent(this, QuestionsActivity::class.java)
+        startActivity(intent)
+    }
+    fun AddN(view: View) {
+        val intent = Intent(this, NewsActivity::class.java)
         startActivity(intent)
     }
     fun Singout(view: View){

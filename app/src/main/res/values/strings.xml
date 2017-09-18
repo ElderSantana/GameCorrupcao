@@ -4,7 +4,6 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notificações</string>
-
     <string name="action_sign_in_short">Registrar</string>
     <string name="email">Email</string>
     <string name="minimum_password">Senha muito curta, digite no minimo 6 caracteres! </string>
@@ -33,6 +32,8 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="facebook_app_id">411196399277809</string>
+    <string name="fb_login_protocol_scheme">fb411196399277809</string>
 
     <string-array name="years">
         <item>2015</item>

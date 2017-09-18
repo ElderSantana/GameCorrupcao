@@ -41,6 +41,7 @@ dependencies {
     compile 'com.android.support:gridlayout-v7:26.0.1'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'//this for the retrofit
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'// this for the JSON converter
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 }
 
 apply plugin: 'com.google.gms.google-services'
