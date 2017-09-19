@@ -11,16 +11,22 @@ import android.view.View
 import android.widget.*
 import com.example.elder.quizz.R
 import com.example.elder.quizz.feature.resetpassword.ResetPasswordActivity
-
 import kotlinx.android.synthetic.main.activity_login.*
-import android.view.ViewGroup
-import android.view.LayoutInflater
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
+import com.facebook.AccessToken
+import com.google.firebase.FirebaseApp
+import java.util.*
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.FacebookAuthProvider
+import model.User
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 
 
@@ -31,16 +37,18 @@ import com.facebook.login.widget.LoginButton
 
 class LoginActivity : AppCompatActivity() {
 
-    private var inputEmail: EditText? = null
     private var inputPassword: EditText? = null
     private var auth: FirebaseAuth? = null
+    private var firebase: FirebaseApp? = null
     private var progressBar: ProgressBar? = null
-    private var btnSignup: Button? = null
-    private var btnLogin: Button? = null
-    private var btnReset: Button? = null
+    private var callbackManager: CallbackManager? = null
+    private val user: User? = null
+    private val mAuth: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // set the view now
+        setContentView(R.layout.activity_login)
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance()
@@ -50,44 +58,37 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-//        login_button.setReadPermissions("email")
-        var callbackManager = CallbackManager.Factory.create()
+        // facebook login
+        callbackManager = CallbackManager.Factory.create()
+        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
 
-        // Callback registration
-        login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                // App code
+                Toast.makeText(applicationContext, "succes", Toast.LENGTH_SHORT).show()
+                accessFacebookLoginData(loginResult.accessToken)
             }
 
             override fun onCancel() {
-                // App code
+                Toast.makeText(applicationContext, "canceled", Toast.LENGTH_SHORT).show()
             }
 
-            override fun onError(exception: FacebookException) {
-                // App code
+            override fun onError(error: FacebookException) {
+                Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
             }
         })
 
-        // set the view now
-        setContentView(R.layout.activity_login)
 
-        inputEmail = findViewById<EditText>(R.id.email)
-        inputPassword = findViewById<EditText>(R.id.password)
-        progressBar = findViewById<ProgressBar>(R.id.progressBar)
-        btnSignup = findViewById<Button>(R.id.btn_signup)
-        btnLogin = findViewById<Button>(R.id.btn_login)
-        btnReset = findViewById<Button>(R.id.btn_reset_password)
+
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance()
 
-        btnSignup!!.setOnClickListener { startActivity(Intent(this@LoginActivity, SignupActivity::class.java)) }
+        btn_signup?.setOnClickListener { startActivity(Intent(this@LoginActivity, SignupActivity::class.java)) }
 
-        btnReset!!.setOnClickListener { startActivity(Intent(this@LoginActivity, ResetPasswordActivity::class.java)) }
+        btn_reset_password?.setOnClickListener { startActivity(Intent(this@LoginActivity, ResetPasswordActivity::class.java)) }
 
-        btnLogin!!.setOnClickListener(View.OnClickListener {
-            val email = inputEmail!!.text.toString()
-            val password = inputPassword!!.text.toString()
+        btn_login?.setOnClickListener(View.OnClickListener {
+            val email = email?.text.toString()
+            val password = password?.text.toString()
 
             if (TextUtils.isEmpty(email)) {
                 Toast.makeText(applicationContext, "Enter email address!", Toast.LENGTH_SHORT).show()
@@ -122,10 +123,51 @@ class LoginActivity : AppCompatActivity() {
                         finish()
                     }
                 }
+
             })
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        super.onActivityResult(requestCode, resultCode, data)
 
 
     }
 
+
+    fun sendLoginFacebookData(v:View) {
+        LoginManager.getInstance()
+                .logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends", "email")
+            )
+    }
+
+    private fun accessFacebookLoginData(accessToken: AccessToken?) {
+        accessLoginData("facebook", accessToken!!.token)
+    }
+
+    private fun accessLoginData(provider: String, vararg tokens: String) {
+        if (tokens != null
+                && tokens.size > 0
+                && tokens[0] != null) {
+
+            var credential = FacebookAuthProvider.getCredential(tokens[0])
+            credential = if (provider.equals("google", ignoreCase = true)) GoogleAuthProvider.getCredential(tokens[0], null) else credential
+
+            user?.saveProviderSP( this, provider )
+            mAuth?.signInWithCredential(credential)?.addOnCompleteListener(object : OnCompleteListener<AuthResult> {
+                        override fun onComplete(task: Task<AuthResult>) {
+
+                            if (!task.isSuccessful) {
+                                 Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    })
+        } else {
+            mAuth?.signOut()
+        }
+    }
+
+
 }
+
+

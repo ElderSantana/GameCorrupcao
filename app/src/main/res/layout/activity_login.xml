@@ -82,13 +82,19 @@
             android:textAllCaps="false"
             android:textSize="15dp" />
 
-        <com.facebook.login.widget.LoginButton
+        <Button
+            android:onClick="sendLoginFacebookData"
             android:id="@+id/login_button"
-            android:layout_width="wrap_content"
+            style="?android:textAppearanceSmall"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp" />
+            android:layout_marginTop="16dp"
+            android:background="@color/com_facebook_blue"
+            android:text="Fcebook"
+            android:textStyle="bold" />
+
+
     </LinearLayout>
 
     <ProgressBar
