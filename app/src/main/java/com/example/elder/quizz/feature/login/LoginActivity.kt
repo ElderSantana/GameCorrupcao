@@ -1,23 +1,23 @@
 package com.example.elder.quizz.feature.login
 
+import android.content.Context
 import com.example.elder.quizz.feature.main.MainActivity
 import android.content.Intent
 import android.text.TextUtils
 import com.example.elder.quizz.feature.signup.SignupActivity
 import com.google.firebase.auth.FirebaseAuth
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.*
 import com.example.elder.quizz.R
 import com.example.elder.quizz.feature.resetpassword.ResetPasswordActivity
+import com.facebook.*
 import kotlinx.android.synthetic.main.activity_login.*
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.AccessToken
 import com.google.firebase.FirebaseApp
 import java.util.*
 import com.google.android.gms.tasks.OnCompleteListener
@@ -27,6 +27,13 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.FacebookAuthProvider
 import model.User
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseUser
+import android.support.annotation.NonNull
+import com.google.firebase.auth.AuthCredential
+import com.facebook.AccessToken
+
+
 
 
 
@@ -59,23 +66,23 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // facebook login
-        callbackManager = CallbackManager.Factory.create()
-        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
 
+        callbackManager = CallbackManager.Factory.create()
+        login_button.setReadPermissions("email", "public_profile")
+        login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                Toast.makeText(applicationContext, "succes", Toast.LENGTH_SHORT).show()
-                accessFacebookLoginData(loginResult.accessToken)
+                Toast.makeText(applicationContext, "onSuccess registerCallback ", Toast.LENGTH_SHORT).show()
+                handleFacebookAccessToken(loginResult.accessToken)
             }
 
             override fun onCancel() {
-                Toast.makeText(applicationContext, "canceled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "onCancel", Toast.LENGTH_SHORT).show()
             }
 
             override fun onError(error: FacebookException) {
-                Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "onError", Toast.LENGTH_SHORT).show()
             }
         })
-
 
 
 
@@ -131,43 +138,27 @@ class LoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        // Pass the activity result back to the Facebook SDK
+        callbackManager?.onActivityResult(requestCode, resultCode, data)
 
     }
 
+    private fun handleFacebookAccessToken(token: AccessToken) {
 
-    fun sendLoginFacebookData(v:View) {
-        LoginManager.getInstance()
-                .logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends", "email")
-            )
+
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        mAuth?.signInWithCredential(credential)
+                ?.addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        val user = mAuth.currentUser
+                        Toast.makeText(this, "Logado", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(this, "Não esta logado", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
     }
-
-    private fun accessFacebookLoginData(accessToken: AccessToken?) {
-        accessLoginData("facebook", accessToken!!.token)
-    }
-
-    private fun accessLoginData(provider: String, vararg tokens: String) {
-        if (tokens != null
-                && tokens.size > 0
-                && tokens[0] != null) {
-
-            var credential = FacebookAuthProvider.getCredential(tokens[0])
-            credential = if (provider.equals("google", ignoreCase = true)) GoogleAuthProvider.getCredential(tokens[0], null) else credential
-
-            user?.saveProviderSP( this, provider )
-            mAuth?.signInWithCredential(credential)?.addOnCompleteListener(object : OnCompleteListener<AuthResult> {
-                        override fun onComplete(task: Task<AuthResult>) {
-
-                            if (!task.isSuccessful) {
-                                 Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    })
-        } else {
-            mAuth?.signOut()
-        }
-    }
-
 
 }
-
-
