@@ -82,15 +82,15 @@ class GameActivity : AppCompatActivity() {
     fun atualizaPerguntas(questions: ArrayList<Questions> ) {
 
          alternatives = ArrayList()
-         if(questions!!.size == numeroPergunta){
+         if(questions?.size == numeroPergunta){
 
              alertaResultado(questions)
 
          }else{
 
              // get the alternatives for the current question
-             DatabaseReference = FirebaseDatabase.getInstance().getReference("alternatives").child(questions!![numeroPergunta].questionId)
-             DatabaseReference!!.addValueEventListener(object : ValueEventListener {
+             DatabaseReference = FirebaseDatabase.getInstance().getReference("alternatives").child(questions[numeroPergunta].questionId)
+             DatabaseReference?.addValueEventListener(object : ValueEventListener {
                  override fun onDataChange(dataSnapshot: DataSnapshot) {
                      (alternatives as ArrayList<Alternatives>).clear()
 
@@ -99,7 +99,7 @@ class GameActivity : AppCompatActivity() {
                          (alternatives as ArrayList<Alternatives>).add(alternative)
                      }
 
-                     pergunta.text = questions!![numeroPergunta].questionTitle
+                     pergunta.text = questions[numeroPergunta].questionTitle
                      alternativa1.text = alternatives!![0].alternativeTitle
                      alternativa2.text = alternatives!![1].alternativeTitle
                      alternativa3.text = alternatives!![2].alternativeTitle
