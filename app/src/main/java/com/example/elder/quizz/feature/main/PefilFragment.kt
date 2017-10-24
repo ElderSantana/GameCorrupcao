@@ -6,14 +6,17 @@ import android.support.v4.app.Fragment
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.elder.quizz.R
 import com.example.elder.quizz.feature.login.LoginActivity
 import com.facebook.*
-import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.perfil_fragment.*
-import retrofit2.http.POST
+import com.facebook.GraphRequest
+import com.facebook.AccessToken
+
+
 
 
 /**
@@ -36,17 +39,16 @@ class PefilFragment : Fragment() {
 
         photo.setOnClickListener{
 
-
-//            val params = Bundle()
-//            params.putString("achievement", "{achievement-1}")
-//            /* Replace {achievement-id} with the ID of your achievement. */
-//            GraphRequest(
-//                    AccessToken.getCurrentAccessToken(),
-//                    "/me/achievements",
-//                    params,
-//                    HttpMethod.POST,
-//                    GraphRequest.Callback { /* Verify the achievement was published. */ }
-//            ).executeAsync()
+            val params = Bundle()
+            params.putInt("score", 1 )
+            /* Replace {achievement-id} with the ID of your achievement. */
+            GraphRequest(
+                    AccessToken.getCurrentAccessToken(),
+                    "/${Profile.getCurrentProfile().id}/scores",
+                    params,
+                    HttpMethod.POST,
+                    GraphRequest.Callback { Toast.makeText(context, "calback", Toast.LENGTH_SHORT).show() /* Verify the achievement was published. */ }
+            ).executeAsync()
         }
 
 

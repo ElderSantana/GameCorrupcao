@@ -12,14 +12,11 @@ import com.example.elder.quizz.feature.login.LoginActivity
 import com.example.elder.quizz.feature.question.NewsActivity
 import com.example.elder.quizz.feature.question.QuestionsActivity
 import com.google.firebase.auth.FirebaseAuth
-
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    var viewPager: ViewPager? = null
-    var tabLayout: TabLayout? = null
     private val tabIcons = intArrayOf(R.drawable.ic_003_home, R.drawable.ic_001_newspaper, R.drawable.ic_menu)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,23 +25,18 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewPager = findViewById<ViewPager>(R.id.viewpager)
 
-        setupViewPager(viewPager!!)
-
-        tabLayout = findViewById<TabLayout>(R.id.tabs)
-        tabLayout!!.setupWithViewPager(viewPager)
-
-        tabLayout = findViewById<TabLayout>(R.id.tabs)
-        tabLayout?.setupWithViewPager(viewPager)
+        setupViewPager(viewpager)
+        tabs!!.setupWithViewPager(viewpager)
+        tabs?.setupWithViewPager(viewpager)
         setupTabIcons()
 
     }
 
     private fun setupTabIcons() {
-        tabLayout?.getTabAt(0)?.setIcon(tabIcons[0])
-        tabLayout?.getTabAt(1)?.setIcon(tabIcons[1])
-        tabLayout?.getTabAt(2)?.setIcon(tabIcons[2])
+        tabs?.getTabAt(0)?.setIcon(tabIcons[0])
+        tabs?.getTabAt(1)?.setIcon(tabIcons[1])
+        tabs?.getTabAt(2)?.setIcon(tabIcons[2])
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
