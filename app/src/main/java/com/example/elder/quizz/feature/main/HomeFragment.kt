@@ -30,34 +30,34 @@ class HomeFragment : Fragment() {
     internal lateinit var databaseAwnsers: DatabaseReference
      var questions: List<Awnsers> = ArrayList()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater?.inflate(R.layout.home_fragment, container, false)
 
 
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
 
-//        databaseAwnsers = FirebaseDatabase.getInstance().getReference("awnsers").child("-KrqSq0YFeouTeUQtVyb")
-//        databaseAwnsers.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                (questions as ArrayList<Awnsers>).clear()
-//
-//                for (postSnapshot in dataSnapshot.children) {
-//                    val question = postSnapshot.getValue<Awnsers>(Awnsers::class.java)
-//                    (questions as ArrayList<Awnsers>).add(question)
-//                }
-//
-//                var texto = view?.findViewById<TextView>(R.id.hometext)
-//                texto?.text = questions[0].AlternativeId
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//
-//            }
-//        })
+        databaseAwnsers = FirebaseDatabase.getInstance().getReference("awnsers").child("-KrqSq0YFeouTeUQtVyb")
+        databaseAwnsers.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                (questions as ArrayList<Awnsers>).clear()
+
+                for (postSnapshot in dataSnapshot.children) {
+                    val question = postSnapshot.getValue<Awnsers>(Awnsers::class.java)
+                    (questions as ArrayList<Awnsers>).add(question)
+                }
+
+                var texto = view?.findViewById<TextView>(R.id.hometext)
+                texto?.text = questions[0].AlternativeId
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        })
 
 
     }
