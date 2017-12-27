@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
+import org.jetbrains.anko.indeterminateProgressDialog
 
 
 class GameActivity : AppCompatActivity() {
@@ -52,6 +53,10 @@ class GameActivity : AppCompatActivity() {
         //list to store artists
         questions = ArrayList()
 
+        val progress = indeterminateProgressDialog( title = R.string.progress_loaging)
+        // show progress
+        progress.show()
+        progress.setCancelable(false)
 
         //get all questions
         QuestionReference = FirebaseDatabase.getInstance().getReference("questions")
@@ -70,11 +75,13 @@ class GameActivity : AppCompatActivity() {
 //                var texto = findViewById<TextView>(R.id.pergunta)
 //                texto.text =   questions?.size.toString()
                 atualizaPerguntas(questions!!)
+                progress.dismiss()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
+
         })
 
     }

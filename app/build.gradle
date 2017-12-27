@@ -47,6 +47,10 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'// this for the JSON converter
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.github.bumptech.glide:glide:4.2.0'
+
+    //Anko
+    compile "org.jetbrains.anko:anko:$anko_version"
+
     annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
 }
 

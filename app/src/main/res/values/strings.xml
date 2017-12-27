@@ -34,6 +34,9 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
     <string name="facebook_app_id">411196399277809</string>
     <string name="fb_login_protocol_scheme">fb411196399277809</string>
+    <string name="progress_warning">Atenção!</string>
+    <string name="progress_loaging">Carregando...</string>
+
 
     <string-array name="years">
         <item>2015</item>

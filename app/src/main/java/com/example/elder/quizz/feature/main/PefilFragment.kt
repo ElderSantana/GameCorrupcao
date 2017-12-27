@@ -34,24 +34,32 @@ class PefilFragment : Fragment() {
             startActivity(Intent(context, LoginActivity::class.java))
         }
 
-        nome.text = Profile.getCurrentProfile().name
-        Glide.with(this).load(Profile.getCurrentProfile().getProfilePictureUri(78,78)).into(photo)
+        try {
 
-        photo.setOnClickListener{
+            btn_sair.setOnClickListener{
+                signout()
+            }
+            nome.text = Profile.getCurrentProfile().name
+            Glide.with(this).load(Profile.getCurrentProfile().getProfilePictureUri(78,78)).into(photo)
 
-            val params = Bundle()
-            params.putInt("score", 1 )
-            /* Replace {achievement-id} with the ID of your achievement. */
-            GraphRequest(
-                    AccessToken.getCurrentAccessToken(),
-                    "/${Profile.getCurrentProfile().id}/scores",
-                    params,
-                    HttpMethod.POST,
-                    GraphRequest.Callback { Toast.makeText(context, "calback", Toast.LENGTH_SHORT).show() /* Verify the achievement was published. */ }
-            ).executeAsync()
+            photo.setOnClickListener{
+
+                val params = Bundle()
+                params.putInt("score", 1 )
+                /* Replace {achievement-id} with the ID of your achievement. */
+                GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "/${Profile.getCurrentProfile().id}/scores",
+                        params,
+                        HttpMethod.POST,
+                        GraphRequest.Callback { Toast.makeText(context, "calback", Toast.LENGTH_SHORT).show() /* Verify the achievement was published. */ }
+                ).executeAsync()
+            }
+
+        } catch (e: Throwable) {
+            e.printStackTrace()
         }
-
-
+        
     }
 
     private fun signout(){

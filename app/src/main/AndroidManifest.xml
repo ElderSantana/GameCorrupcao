@@ -44,6 +44,7 @@
         <activity android:name=".feature.signup.SignupActivity" />
         <activity android:name=".feature.question.NewsActivity" />
         <activity android:name=".feature.question.QuestionActivity" />
+        <activity android:name=".feature.question.QuestionsActivity" />
         <activity android:name=".feature.game.ResultActivity"></activity>
     </application>
 
